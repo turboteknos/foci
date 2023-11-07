@@ -29,25 +29,22 @@ namespace foci
 
         static void Fajlfeltolt()
         {
+            // meccs.Add(new Merkozes(Convert.ToByte(sor[0]), Convert.ToByte(sor[1]), Convert.ToByte(sor[2]), Convert.ToByte(sor[3]), Convert.ToByte(sor[4]), sor[5], sor[6]));
             try
             {
-                FileStream fs = new FileStream("meccs.txt", FileMode.Open);
-                StreamReader sr = new StreamReader(fs);
-                sr.ReadLine();
-                string[] sor;
-                while (!sr.EndOfStream)
+                var lines = File.ReadLines("meccs.txt").Skip(1);
+                foreach (var line in lines)
                 {
-                    sor = sr.ReadLine().Split(' ');
+                    string[] sor = line.Split(' ');
                     meccs.Add(new Merkozes(Convert.ToByte(sor[0]), Convert.ToByte(sor[1]), Convert.ToByte(sor[2]), Convert.ToByte(sor[3]), Convert.ToByte(sor[4]), sor[5], sor[6]));
+
+
                 }
-                fs.Close();
-                sr.Close();
                 Console.WriteLine("Sikeres feltöltés");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                Console.WriteLine("Sikertelen feltöltés");
+                Console.WriteLine($"Feltöltés sikertelen: {ex}");
             }
 
 
