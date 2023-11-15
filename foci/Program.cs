@@ -60,6 +60,7 @@ namespace foci
             MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
+                Console.WriteLine("Kapcsolódás az adatbázishoz...");
                 conn.Open();
                 var sql = "SELECT * FROM eredmenyek";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -68,14 +69,20 @@ namespace foci
                 {
                     meccs.Add(new Merkozes(Convert.ToByte(rdr[0]), Convert.ToByte(rdr[1]), Convert.ToByte(rdr[2]), Convert.ToByte(rdr[3]), Convert.ToByte(rdr[4]), rdr[5].ToString(), rdr[6].ToString()));
                 }
+                Console.WriteLine("Sikeres kapcsolódás az adatbázishoz!");
 
             }
             catch (Exception ex)
             {
+                Console.Clear();
+                Console.WriteLine("Sikertelen kapcsolódás az adatbázishoz!");
                 Console.WriteLine(ex.ToString());
-                conn.Close();
             }
-            conn.Close();
+            finally {
+                conn.Close();
+
+            }
+
         }
 
 
