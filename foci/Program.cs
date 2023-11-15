@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using MySql.Data.MySqlClient;
+using System.Diagnostics;
 using System.Linq;
+
 namespace foci
 {
     internal class Program
@@ -8,7 +10,7 @@ namespace foci
         static void Main(string[] args)
         {
             FeladatKiir(1);
-            Fajlfeltolt();
+            FajlFeltoltSQL();
             Console.WriteLine("Adja meg a forduló számát: ");
             FeladatKiir(2, Feladat2(Convert.ToByte(Console.ReadLine())));
             FeladatKiir(3);
@@ -50,6 +52,34 @@ namespace foci
 
 
         }
+
+        static void FajlFeltoltSQL()
+        {
+            string connStr = "server=localhost;userid=root;password=;database=foci";
+
+            MySqlConnection conn = new MySqlConnection(connStr);
+            try
+            {
+                conn.Open();
+                var sql = "SELECT * FROM eredmenyek";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    meccs.Add(new Merkozes(Convert.ToByte(rdr[0]), Convert.ToByte(rdr[1]), Convert.ToByte(rdr[2]), Convert.ToByte(rdr[3]), Convert.ToByte(rdr[4]), rdr[5].ToString(), rdr[6].ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                conn.Close();
+            }
+            conn.Close();
+        }
+
+
+
 
         static void FeladatKiir(byte fszam, string szoveg = "")
         {
